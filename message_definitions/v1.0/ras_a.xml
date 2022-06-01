@@ -27,9 +27,9 @@
         <param index="7" label="Time to Land" units="s" minValue="0">Time to land in which the MAV should go to the default position hold mode after a message RX timeout.</param>
       </entry>
       <entry value="37" name="MAV_CMD_DO_FOLLOW_POI" hasLocation="false" isDestination="false">
-        <description>Begin following a target specified by POI ID</description>
-        <param index="1" label="POI UID Upper 32 Bits">The upper 32 bits of the uid from a POI_REPORT.</param>
-        <param index="2" label="POI UID Lower 32 Bits">The lower 32 bits of the uid from a POI_REPORT</param>
+        <description>Begin following a target specified by POI ID.  A POI Unique ID (UID) is a 64-bit field, and so to fully represent that UID, the big endian 64-bit POI UID is split into 2 words; param1: upper 32-bit word, param2: lower 32-bit word.</description>
+        <param index="1" label="POI UID Upper 32 Bits">The upper 32 bits of the UID from a POI_REPORT.</param>
+        <param index="2" label="POI UID Lower 32 Bits">The lower 32 bits of the UID from a POI_REPORT</param>
         <param index="3" label="Mode Flags" enum="FOLLOW_POI_MODE_FLAGS">Bitmask of option flags.</param>
         <param index="4" label="Altitude" units="mm or degE7">Altitude field, behavior to be interpreted according to Mode Flags.</param>
         <param index="5" label="Azimuth" units="degE7">Azimuth field, behavior to be interpreted according to Mode Flags.</param>
