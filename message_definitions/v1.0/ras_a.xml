@@ -47,6 +47,37 @@
         <param index="7">Reserved</param>
       </entry>
     </enum>
+    
+    <enum name="FOLLOW_POI_MODE_FLAGS" bitmask="true">
+      <entry value="1" name="ALTITUDE_MODE_AMSL">
+        <description>Altitude to be interpreted as absolute AMSL</description>
+      </entry>
+      <entry value="2" name="ALTITUDE_MODE_RELATIVE">
+        <description>Altitude to be interpreted as relative to follow target</description>
+      </entry>
+      <entry value="4" name="ALTITUDE_MODE_RELATIVE_ELEVATION_ANGLE">
+        <description>Altitude interpreted as an elevation angle, ie the angle from POV of target between horizon and vehicle</description>
+      </entry>
+      <!-- Fields 4-8 reserved for future altiude modes-->
+      <entry value="256" name="AZIMUTH_MODE_FIXED_YAW">
+        <description>Azimuth to be interpreted as the vehicles fixed yaw in local NED frame. Autopilot will update the relative angle to subject to maintain this fixed yaw heading.</description>
+      </entry>
+      <entry value="512" name="AZIMUTH_MODE_MOTION_RELATIVE">
+        <description>Azimuth is the horizontal angle of the vehicle around the subject. Increase azimuth to rotate counter-clockwise around the subject. An azimuth angle of 0 will follow the subject, while an azimuth angle of 180 will lead the subject. </description>
+      </entry>
+      <!-- Fields 9-16 reserved for azimuth modes-->
+      <entry value="65536" name="RANGE_MODE_GROUND">
+        <description>Range will be intepreted as the horizontal distance to the vehicle.</description>
+      </entry>
+      <entry value="131072" name="RANGE_MODE_SLANT">
+        <description>Range will be intepreted as the slant distance to the vehicle. Incompatible with ALTITUDE_MODE_AMSL and ALTITUDE_MODE_RELATIVE</description>
+      </entry>
+      <!-- Fields 19-24 reserved for range modes-->
+      <entry value="16777216" name="DISABLE_MANUAL_OVERRIDE">
+        <description>If enabled, MANUAL_CONTROL will be ignored, otherwise MANUAL_CONTROL should be interpreted as updates to the altitude, azimuth, range parameters</description>
+      </entry>
+      <!-- Fields 25-32 reserved for behavior modes-->
+    </enum>
     <enum name="POI_GEOMETRY_TYPE">
       <description>Point-of-Interest geometry types.</description>
       <entry value="0" name="POI_GEOMETRY_TYPE_UNKNOWN">
