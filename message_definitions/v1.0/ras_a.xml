@@ -31,9 +31,9 @@
         <param index="1" label="POI UID Upper 32 Bits">The upper 32 bits of the uid from a POI_REPORT.</param>
         <param index="2" label="POI UID Lower 32 Bits">The lower 32 bits of the uid from a POI_REPORT</param>
         <param index="3" label="Mode Flags" enum="FOLLOW_POI_MODE_FLAGS">Bitmask of option flags.</param>
-        <param index="4" label="Altitude" units="mm or degE7">Altitude above home. (used if mode=2)</param>
-        <param index="5" label="Azimuth" units="degE7">Altitude above home. (used if mode=2)</param>
-        <param index="6" label="Range" units="mm">Altitude above home. (used if mode=2)</param>
+        <param index="4" label="Altitude" units="mm or degE7">Altitude field, behavior to be interpreted according to Mode Flags.</param>
+        <param index="5" label="Azimuth" units="degE7">Azimuth field, behavior to be interpreted according to Mode Flags.</param>
+        <param index="6" label="Range" units="mm">Range field, behavior to be interpreted according to Mode Flags.</param>
         <param index="7" label="Time to Return" units="s" minValue="0">Time to return in which the Autopilot should enter return to comms behavior. If 0, vehicle will immediaately enter return to comms behavior after losing comms with GCS</param>
       </entry>
       <entry value="38" name="MAV_CMD_DO_FOLLOW_NONE" hasLocation="false" isDestination="false">
