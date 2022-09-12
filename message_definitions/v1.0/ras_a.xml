@@ -172,6 +172,21 @@
         <description>Animal (unidentified species).</description>
       </entry>
     </enum>
+    <enum name="FOLLOW_MODE">
+      <description>These values define various methods of following a subject</description>
+      <entry value="0" name="MOTION_FOLLOW">
+        <description>Platform moves in whatever method it can to best follow a subject using subject_follow_dist and subject_follow_bearing as suggestions</description>
+      </entry>
+      <entry value="1" name="FIXED_FOLLOW">
+        <description>Platform maintains a fixed range (subject_follow_dist) and bearing (subject_follow_bearing) to the subject</description>
+      </entry>
+      <entry value="2" name="ORBIT">
+        <description>Platform continually orbits the moving subject at subject_follow_dist radius. Ignores subject_follow_bearing</description>
+      </entry>
+      <entry value="3" name="TRIPOD">
+        <description>Platform stays stationary but its sensors follow the subject.  Ignores subject_follow_dist and subject_follow_bearing</description>
+      </entry>
+    </enum>
   </enums>
   <messages>
     <message id="238" name="POI_REPORT">
@@ -219,6 +234,18 @@
       <field type="float[3]" name="approach_velocity" units="m/s" invalid="[NaN]">Recommended NED velocity for vehicle approach to the POI. This can either be determined by the end system where the POI was detected ir by a system forwarding the information to another vehicle. Unknown is NaN, NaN, NaN.</field>
       <field type="char[32]" name="name">Name of the POI, if the system provides one. NULL terminated string.</field>
       <field type="char[31]" name="app6_symbol">APP-6(D) standard symbol 30-digit Symbol Identification Code (SIDC) that provides the necessary information to display a tactical symbol. The SIDC is formed with eleven elements which are presented in two sets of ten digits and an additional set of ten digits composed of three elements, which are optional. Any unspecified element should be set to '0'. The way these codes are built can be checked on the Annex A to the APP-6 - NATO Joint Military Symbology, version D. NULL terminated string.</field>
+    </message>
+    <message id="421" name="FOLLOW_POI">
+      <wip/>
+      <description>Invoke platform to begin following a POI as a subject</description>
+      <field type="uint8_t" name="target_system">System ID.</field>
+      <field type="uint8_t" name="target_component">Component ID.</field>
+      <field type="uint64_t" name="poi_uid" invalid="0">UID of the POI to follow</field>
+      <field type="uint8_t" name="follow_mode" enum="FOLLOW_MODE">Mode by which to follow</field>
+      <field type="float" name="relative_follow_altitude" units="m" invalid="NaN">The desired vertical offset in meters to attempt to maintain relative to the altitude of the subject.  Positive if following from above.  NaN if no preference.</field>
+      <field type="float" name="subject_follow_dist" units="m" invalid="NaN">Distance in 3D meters to attempt to maintain from target subject</field>
+      <field type="float" name="subject_follow_bearing" units="deg" invalid="NaN">Bearing in degrees from POI to attempt to maintain</field>
+      <field type="uint8_t" name="auto_mode_switch">Boolean indicating whether the platform should auto-switch into FOLLOW mode.  If auto_mode_switch is 0, it should wait to be transitioned to FOLLOW mode before it begins following the subject.</field>
     </message>
   </messages>
 </mavlink>
