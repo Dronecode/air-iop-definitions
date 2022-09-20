@@ -174,6 +174,16 @@
         <param index="2" label="X Position in the camera frame" minValue="0" increment="1">Position given by the number of pixels in X direction of the camera frame. Origin on the bottom left corner of the camera frame.</param>
         <param index="3" label="Y Position in the camera frame" minValue="0" increment="1">Position given by the number of pixels in Y direction of the camera frame. Origin on the bottom left corner of the camera frame.</param>
       </entry>
+      <entry value="41051" name="MAV_CMD_DO_FOLLOW_POI" hasLocation="false" isDestination="false">
+        <wip/>
+        <!-- This command is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
+        <description>Invoke platform to begin following a POI as a subject</description>
+        <param index="1" label="POI UID" minValue="0" maxValue="4294967295" increment="1">UID of the POI to follow</param>
+        <param index="2" label="Follow Mode" minValue="0" increment="1" enum="FOLLOW_MODE">Mode by which to follow the POI</param>
+        <param index="3" label="Relative Follow Altitude" units="m">The desired vertical offset in meters to attempt to maintain relative to the altitude of the subject.  Positive if following from above.  NaN if no preference.</param>
+        <param index="4" label="Subject Follow Distance" units="m">Distance in 3D meters to attempt to maintain from target subject</param>
+        <param index="5" label="Subject Follow Bearing" units="deg">Bearing in degrees from POI to attempt to maintain</param>
+      </entry>
     </enum>
     <enum name="POI_GEOMETRY_TYPE">
       <description>Point-of-Interest geometry types.</description>
@@ -357,6 +367,21 @@
         <description>Exploration task fault caused by a navigation problem.</description>
       </entry>
     </enum>
+    <enum name="FOLLOW_MODE">
+       <description>These values define various methods of following a subject</description>
+       <entry value="0" name="MOTION_FOLLOW">
+         <description>Platform moves in whatever method it can to best follow a subject using subject_follow_dist and subject_follow_bearing as suggestions</description>
+       </entry>
+       <entry value="1" name="FIXED_FOLLOW">
+         <description>Platform maintains a fixed range (subject_follow_dist) and bearing (subject_follow_bearing) to the subject</description>
+       </entry>
+       <entry value="2" name="ORBIT">
+         <description>Platform continually orbits the moving subject at subject_follow_dist radius. Ignores subject_follow_bearing</description>
+       </entry>
+       <entry value="3" name="TRIPOD">
+         <description>Platform stays stationary but its sensors follow the subject.  Ignores subject_follow_dist and subject_follow_bearing</description>
+       </entry>
+    </enum>
   </enums>
   <messages>
     <message id="238" name="POI_REPORT">
@@ -372,7 +397,7 @@
         The fixed rate though can be set by the receiver using MAV_CMD_SET_MESSAGE_INTERVAL, which is advised for POIs that are not static or for which
         the state updates are high - decision on the rates of some specific POIs is at the implementers consideration.
       </description>
-      <field type="uint64_t" name="uid" invalid="0">Unique ID for a given POI. Updates to a POIs information should use the same uid. 0 means unknown.</field>
+      <field type="uint32_t" name="uid" invalid="0">Unique ID for a given POI. Updates to a POIs information should use the same uid. 0 means unknown.</field>
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
       <field type="uint64_t" name="time_utc_detected" units="ms" invalid="0">Timestamp (time since UNIX epoch) of the POI detection, in UTC. 0 for unknown.</field>
       <field type="uint64_t" name="time_utc_updated" units="ms" invalid="0">Timestamp (time since UNIX epoch) of the last POI update, in UTC. 0 for unknown.</field>
