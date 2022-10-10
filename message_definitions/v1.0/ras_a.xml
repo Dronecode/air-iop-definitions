@@ -43,7 +43,7 @@
           COMMAND_INT should be used with its MAV_FRAME set appropriately. This will affect the coordinates used for the portal position (MAV_FRAME_GLOBAL means global coordinates are being used,
           while MAV_FRAME_LOCAL_NED means local NED coordinates are being used).
         </description>
-        <param index="1" label="Portal ID" minValue="0" maxValue="4294967295" increment="1">ID of the portal. If the ID is unknown or not deterministic, set it to UINT32_MAX and use params 5, 6 and 7 to define the local or global position of the portal.</param>
+        <param index="1" label="Portal ID" minValue="0" maxValue="2147483647" increment="1">ID of the portal. If the ID is unknown or not deterministic, set it to UINT32_MAX and use params 5, 6 and 7 to define the local or global position of the portal.</param>
         <param index="2" reserved="true" default="NaN"/>
         <param index="3" reserved="true" default="NaN"/>
         <param index="4" reserved="true" default="NaN"/>
@@ -59,7 +59,7 @@
           COMMAND_INT should be used with its MAV_FRAME set appropriately. This will affect the coordinates used for the approach vector (MAV_FRAME_GLOBAL means global coordinates are being used,
           while MAV_FRAME_LOCAL_NED means local NED coordinates are being used).
         </description>
-        <param index="1" label="Portal ID" minValue="0" maxValue="4294967295" increment="1">ID of the portal to be set as an ingress point.</param>
+        <param index="1" label="Portal ID" minValue="0" maxValue="2147483647" increment="1">ID of the portal to be set as an ingress point.</param>
         <param index="2" label="Approach vector initial point X or Latitude">X (m) or Latitude (deg) (WGS84) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
         <param index="3" label="Approach vector initial point Y or Longitude">Y (m) or Longitude (deg) (WGS84) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
         <param index="4" label="Approach vector initial point Z or Altitude (MSL)" units="m">Z or Altitude (MSL) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
@@ -75,7 +75,7 @@
           COMMAND_INT should be used with its MAV_FRAME set appropriately. This will affect the coordinates used for the approach vector (MAV_FRAME_GLOBAL means global coordinates are being used,
           while MAV_FRAME_LOCAL_NED means local NED coordinates are being used).
         </description>
-        <param index="1" label="Portal ID" minValue="0" maxValue="4294967295" increment="1">ID of the portal to be set as an egress point.</param>
+        <param index="1" label="Portal ID" minValue="0" maxValue="2147483647" increment="1">ID of the portal to be set as an egress point.</param>
         <param index="2" label="Approach vector initial point X or Latitude">X (m) or Latitude (deg) (WGS84) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
         <param index="3" label="Approach vector initial point Y or Longitude">Y (m) or Longitude (deg) (WGS84) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
         <param index="4" label="Approach vector initial point Z or Altitude (MSL)" units="m">Z or Altitude (MSL) coordinate (depending on MAV_FRAME) of the initial point of the approach vector to the portal. NaN if unknown.</param>
@@ -97,7 +97,7 @@
         <param index="1" label="Exploration task ID" minValue="0" maxValue="255" increment="1">Sets the ID of the exploration task to start. If the ID already exists, it resumes that (queued/listed) exploration task. Set to UINT8_MAX if one wants to resume the last exploration task.</param>
         <param index="2" label="Time limit" units="s" minValue="0">Time limit to execute the exploration. Reaching this time triggers the behavior defined in param 4. Set to 0 when there is no time limit.</param>
         <param index="3" label="Behavior after finishing" minValue="0" maxValue="2" increment="1">The behavior after finishing the exploration task. 0: Hold, 1: Land, 2: Return to position.</param>
-        <param index="4" label="Ingress Portal ID" minValue="0" maxValue="4294967295" increment="1">ID of the ingress portal. If the ID is unknown, not deterministic, or when already in the area to explore after going through a portal, set it to UINT32_MAX and use params 5, 6 and 7 to define the local or global position of the portal. Note that an egress portal is not defined by this command but can be consequently set either by the vehicle autonomy engine or by an operator/external controller using MAV_CMD_SET_EGRESS_PORTAL.</param>
+        <param index="4" label="Ingress Portal ID" minValue="0" maxValue="2147483647" increment="1">ID of the ingress portal. If the ID is unknown, not deterministic, or when already in the area to explore after going through a portal, set it to UINT32_MAX and use params 5, 6 and 7 to define the local or global position of the portal. Note that an egress portal is not defined by this command but can be consequently set either by the vehicle autonomy engine or by an operator/external controller using MAV_CMD_SET_EGRESS_PORTAL.</param>
         <param index="5" label="Position X or Latitude">X (mE4) or Latitude (degE7) (WGS84) coordinate (depending on MAV_FRAME) of the portal position. INT32_MAX if unknown (or if using param 4 to set the portal).</param>
         <param index="6" label="Position Y or Longitude">Y (mE4) or Longitude (degE7) (WGS84) coordinate (depending on MAV_FRAME) of the portal position. INT32_MAX if unknown (or if using param 4 to set the portal).</param>
         <param index="7" label="Position Z or Altitude (MSL)" units="m">Z or Altitude (MSL) coordinate (depending on MAV_FRAME) of the portal position. NaN when unknown or when using param 4 to set the portal ID.</param>
@@ -110,7 +110,7 @@
           Return to position should take the vehicle to the defined exit portal first, and then to the return post-exploration point (accessible through EXPLORATION_RETURN_POSITION).
           If the passed exploration ID does not exist or is not listed as a valid exploration ID in the vehicle autonomy engine, then this command should be rejected.
         </description>
-        <param index="1" label="Exploration task ID" minValue="0" maxValue="4294967295" increment="1">Sets the ID of the (current or queued) exploration task to stop. Set to UINT32_MAX if one wants to stop the current exploration task.</param>
+        <param index="1" label="Exploration task ID" minValue="0" maxValue="2147483647" increment="1">Sets the ID of the (current or queued) exploration task to stop. Set to UINT32_MAX if one wants to stop the current exploration task.</param>
         <param index="2" label="Behavior after stopping" minValue="0" maxValue="2" increment="1">The behavior after stopping the exploration task. 0: Hold, 1: Land, 2: Return to position.</param>
         <param index="3" reserved="true" default="NaN"/>
         <param index="4" reserved="true" default="NaN"/>
@@ -126,7 +126,7 @@
           COMMAND_INT should be used with its MAV_FRAME set appropriately. This will affect the coordinates used for the position (MAV_FRAME_GLOBAL means global coordinates are being used,
           while MAV_FRAME_LOCAL_NED means local NED coordinates are being used).
         </description>
-        <param index="1" label="Exploration task ID" minValue="0" maxValue="4294967295" increment="1">ID of the exploration to set the return position to. Set to UINT32_MAX if one wants to set it to the current exploration task.</param>
+        <param index="1" label="Exploration task ID" minValue="0" maxValue="2147483647" increment="1">ID of the exploration to set the return position to. Set to UINT32_MAX if one wants to set it to the current exploration task.</param>
         <param index="2" reserved="true" default="NaN"/>
         <param index="3" reserved="true" default="NaN"/>
         <param index="4" label="Yaw or Heading" units="rad">Yaw or heading of the return position. NaN if unknown.</param>
@@ -178,7 +178,7 @@
         <wip/>
         <!-- This command is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
         <description>Invoke platform to begin following a POI as a subject</description>
-        <param index="1" label="POI UID" minValue="0" maxValue="4294967295" increment="1">UID of the POI to follow</param>
+        <param index="1" label="POI UID" minValue="0" maxValue="2147483647" increment="1">UID of the POI to follow</param>
         <param index="2" label="Follow Mode" minValue="0" increment="1" enum="FOLLOW_MODE">Mode by which to follow the POI</param>
         <param index="3" label="Relative Follow Altitude" units="m">The desired vertical offset in meters to attempt to maintain relative to the altitude of the subject.  Positive if following from above.  NaN if no preference.</param>
         <param index="4" label="Subject Follow Distance" units="m">Distance in 3D meters to attempt to maintain from target subject</param>
