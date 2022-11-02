@@ -397,7 +397,7 @@
         The fixed rate though can be set by the receiver using MAV_CMD_SET_MESSAGE_INTERVAL, which is advised for POIs that are not static or for which
         the state updates are high - decision on the rates of some specific POIs is at the implementers consideration.
       </description>
-      <field type="uint32_t" name="uid" invalid="0">Unique ID for a given POI. Updates to a POIs information should use the same uid. 0 means unknown.</field>
+      <field type="uint32_t" name="uid" invalid="0">Unique ID for a given POI. Updates to a POIs information should use the same uid. Maximum integer to use is 2,147,483,647 (for the purposes of type-safety when converting back and forth to floating-point fields). 0 means unknown.</field>
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
       <field type="uint64_t" name="time_utc_detected" units="ms" invalid="0">Timestamp (time since UNIX epoch) of the POI detection, in UTC. 0 for unknown.</field>
       <field type="uint64_t" name="time_utc_updated" units="ms" invalid="0">Timestamp (time since UNIX epoch) of the last POI update, in UTC. 0 for unknown.</field>
