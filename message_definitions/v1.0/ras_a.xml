@@ -368,19 +368,19 @@
       </entry>
     </enum>
     <enum name="FOLLOW_MODE">
-       <description>These values define various methods of following a subject</description>
-       <entry value="0" name="MOTION_FOLLOW">
-         <description>Platform moves in whatever method it can to best follow a subject using subject_follow_dist and subject_follow_bearing as suggestions</description>
-       </entry>
-       <entry value="1" name="FIXED_FOLLOW">
-         <description>Platform maintains a fixed range (subject_follow_dist) and bearing (subject_follow_bearing) to the subject</description>
-       </entry>
-       <entry value="2" name="ORBIT">
-         <description>Platform continually orbits the moving subject at subject_follow_dist radius. Ignores subject_follow_bearing</description>
-       </entry>
-       <entry value="3" name="TRIPOD">
-         <description>Platform stays stationary but its sensors follow the subject.  Ignores subject_follow_dist and subject_follow_bearing</description>
-       </entry>
+      <description>These values define various methods of following a subject</description>
+      <entry value="0" name="MOTION_FOLLOW">
+        <description>Platform moves in whatever method it can to best follow a subject using subject_follow_dist and subject_follow_bearing as suggestions</description>
+      </entry>
+      <entry value="1" name="FIXED_FOLLOW">
+        <description>Platform maintains a fixed range (subject_follow_dist) and bearing (subject_follow_bearing) to the subject</description>
+      </entry>
+      <entry value="2" name="ORBIT">
+        <description>Platform continually orbits the moving subject at subject_follow_dist radius. Ignores subject_follow_bearing</description>
+      </entry>
+      <entry value="3" name="TRIPOD">
+        <description>Platform stays stationary but its sensors follow the subject.  Ignores subject_follow_dist and subject_follow_bearing</description>
+      </entry>
     </enum>
   </enums>
   <messages>
