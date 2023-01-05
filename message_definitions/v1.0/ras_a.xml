@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <mavlink>
+  <!-- Contact info: ? -->
+  <!-- URL: ? -->
+  <!-- message ID range: 51000 - 52000 -->
+  <!-- command ID range: 51000 - 52000 -->
   <include>development.xml</include>
   <version>0</version>
   <dialect>0</dialect>
