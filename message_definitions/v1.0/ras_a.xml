@@ -384,7 +384,7 @@
     </enum>
   </enums>
   <messages>
-    <message id="30000" name="POI_REPORT">
+    <message id="51000" name="POI_REPORT">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Reports information for a detected Point-of-Interest (POI).
