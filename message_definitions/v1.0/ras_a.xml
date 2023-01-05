@@ -384,7 +384,7 @@
     </enum>
   </enums>
   <messages>
-    <message id="238" name="POI_REPORT">
+    <message id="30000" name="POI_REPORT">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Reports information for a detected Point-of-Interest (POI).
@@ -423,7 +423,7 @@
       <field type="float" name="vel_d" units="m/s" invalid="NaN">Down velocity of the POI. NAN if unknown.</field>
       <field type="float" name="hdg" units="rad" invalid="NaN">Heading of the POI in the NED frame. NAN if unknown.</field>
     </message>
-    <message id="450" name="EXPLORATION_STATUS">
+    <message id="30100" name="EXPLORATION_STATUS">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Provides status over an exploration task. The message should, by default, be streamed at 1Hz.</description>
@@ -435,7 +435,7 @@
       <field type="uint16_t" name="flags" enum="MAV_EXPLORATION_STATUS_FLAGS">Bitmap of the exploration task status flags.</field>
       <field type="int8_t" name="level" invalid="INT8_MAX">In an indoor exploration task, it indicates the floor/level of the structure that is currently being explored. The level where the vehicle started the exploration is considered the level 0. INT8_MAX when unknown, not capable to provide or not applicable.</field>
     </message>
-    <message id="451" name="EXPLORATION_INFO">
+    <message id="30101" name="EXPLORATION_INFO">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Provides configuration information about an exploration task.
@@ -466,7 +466,7 @@
       <field type="int32_t" name="egress_portal_lon" units="degE7" invalid="INT32_MAX">Currently defined egress portal Longitude (WGS84). INT32_MAX if unknown, not applicable or when egress_portal_id is set and different from UINT32_MAX.</field>
       <field type="float" name="egress_portal_alt" units="m" invalid="NaN">Currently defined egress portal Altitude (MSL). NaN if unknown, not applicable or when egress_portal_id is set and different from UINT32_MAX.</field>
     </message>
-    <message id="452" name="EXPLORATION_RETURN_POSITION">
+    <message id="30102" name="EXPLORATION_RETURN_POSITION">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
       <description>Provides the return-from-exploration position when an exploration is completed (e.g. volume set by the exploration boundaries does not have new open areas for
