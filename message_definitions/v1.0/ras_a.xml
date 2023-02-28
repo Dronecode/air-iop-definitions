@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <mavlink>
-  <!-- Contact info: ? -->
-  <!-- URL: ? -->
-  <!-- message ID range: 51000 - 52000 -->
-  <!-- command ID range: 51000 - 52000 -->
+  <!-- Contact: Nuno Marques <n.marques21@hotmail.com> | Github: TSC21 -->
+  <!-- message ID range: 51000 - 51999 -->
+  <!-- command ID range: 51000 - 51999 -->
   <include>development.xml</include>
   <version>0</version>
   <dialect>0</dialect>
