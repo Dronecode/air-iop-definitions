@@ -425,42 +425,48 @@
       </entry>
     </enum>
     <enum name="GIMBAL_DEVICE_CAP_FLAGS" bitmask="true">
-      <description>Gimbal device (low level) capability flags (bitmap)</description>
+      <description>Gimbal device (low level) capability flags (bitmap).</description>
       <entry value="1" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_RETRACT">
-        <description>Gimbal device supports a retracted position</description>
+        <description>Gimbal device supports a retracted position.</description>
       </entry>
       <entry value="2" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_NEUTRAL">
-        <description>Gimbal device supports a horizontal, forward looking position, stabilized</description>
+        <description>Gimbal device supports a horizontal, forward looking position, stabilized.</description>
       </entry>
       <entry value="4" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_ROLL_AXIS">
         <description>Gimbal device supports rotating around roll axis.</description>
       </entry>
       <entry value="8" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_ROLL_FOLLOW">
-        <description>Gimbal device supports to follow a roll angle relative to the vehicle</description>
+        <description>Gimbal device supports to follow a roll angle relative to the vehicle.</description>
       </entry>
       <entry value="16" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_ROLL_LOCK">
-        <description>Gimbal device supports locking to an roll angle (generally that's the default with roll stabilized)</description>
+        <description>Gimbal device supports locking to a roll angle (generally that's the default with roll stabilized).</description>
       </entry>
       <entry value="32" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_PITCH_AXIS">
         <description>Gimbal device supports rotating around pitch axis.</description>
       </entry>
       <entry value="64" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_PITCH_FOLLOW">
-        <description>Gimbal device supports to follow a pitch angle relative to the vehicle</description>
+        <description>Gimbal device supports to follow a pitch angle relative to the vehicle.</description>
       </entry>
       <entry value="128" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_PITCH_LOCK">
-        <description>Gimbal device supports locking to an pitch angle (generally that's the default with pitch stabilized)</description>
+        <description>Gimbal device supports locking to a pitch angle (generally that's the default with pitch stabilized).</description>
       </entry>
       <entry value="256" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_AXIS">
         <description>Gimbal device supports rotating around yaw axis.</description>
       </entry>
       <entry value="512" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_FOLLOW">
-        <description>Gimbal device supports to follow a yaw angle relative to the vehicle (generally that's the default)</description>
+        <description>Gimbal device supports to follow a yaw angle relative to the vehicle (generally that's the default).</description>
       </entry>
       <entry value="1024" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_LOCK">
-        <description>Gimbal device supports locking to an absolute heading (often this is an option available)</description>
+        <description>Gimbal device supports locking to an absolute heading, i.e., yaw angle relative to North (earth frame, often this is an option available).</description>
       </entry>
       <entry value="2048" name="GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW">
         <description>Gimbal device supports yawing/panning infinetely (e.g. using slip disk).</description>
+      </entry>
+      <entry value="4096" name="GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME">
+        <description>Gimbal device supports yaw angles and angular velocities relative to North (earth frame). This usually requires support by an autopilot via AUTOPILOT_STATE_FOR_GIMBAL_DEVICE. Support can go on and off during runtime, which is reported by the flag GIMBAL_DEVICE_FLAGS_CAN_ACCEPT_YAW_IN_EARTH_FRAME.</description>
+      </entry>
+      <entry value="8192" name="GIMBAL_DEVICE_CAP_FLAGS_HAS_RC_INPUTS">
+        <description>Gimbal device supports radio control inputs as an alternative input for controlling the gimbal orientation.</description>
       </entry>
     </enum>
     <enum name="GIMBAL_MANAGER_CAP_FLAGS" bitmask="true">
@@ -501,6 +507,12 @@
       <entry value="2048" name="GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_INFINITE_YAW">
         <description>Based on GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW.</description>
       </entry>
+      <entry value="4096" name="GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME">
+        <description>Based on GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME.</description>
+      </entry>
+      <entry value="8192" name="GIMBAL_MANAGER_CAP_FLAGS_HAS_RC_INPUTS">
+        <description>Based on GIMBAL_DEVICE_CAP_FLAGS_HAS_RC_INPUTS.</description>
+      </entry>
       <entry value="65536" name="GIMBAL_MANAGER_CAP_FLAGS_CAN_POINT_LOCATION_LOCAL">
         <description>Gimbal manager supports to point to a local position.</description>
       </entry>
@@ -514,34 +526,64 @@
         <description>Set to retracted safe position (no stabilization), takes presedence over all other flags.</description>
       </entry>
       <entry value="2" name="GIMBAL_DEVICE_FLAGS_NEUTRAL">
-        <description>Set to neutral/default position, taking precedence over all other flags except RETRACT. Neutral is commonly forward-facing and horizontal (pitch=yaw=0) but may be any orientation.</description>
+        <description>Set to neutral/default position, taking precedence over all other flags except RETRACT. Neutral is commonly forward-facing and horizontal (roll=pitch=yaw=0) but may be any orientation.</description>
       </entry>
       <entry value="4" name="GIMBAL_DEVICE_FLAGS_ROLL_LOCK">
-        <description>Lock roll angle to absolute angle relative to horizon (not relative to drone). This is generally the default with a stabilizing gimbal.</description>
+        <description>Lock roll angle to absolute angle relative to horizon (not relative to vehicle). This is generally the default with a stabilizing gimbal.</description>
       </entry>
       <entry value="8" name="GIMBAL_DEVICE_FLAGS_PITCH_LOCK">
-        <description>Lock pitch angle to absolute angle relative to horizon (not relative to drone). This is generally the default.</description>
+        <description>Lock pitch angle to absolute angle relative to horizon (not relative to vehicle). This is generally the default with a stabilizing gimbal.</description>
       </entry>
       <entry value="16" name="GIMBAL_DEVICE_FLAGS_YAW_LOCK">
-        <description>Lock yaw angle to absolute angle relative to North (not relative to drone). If this flag is set, the quaternion is in the Earth frame with the x-axis pointing North (yaw absolute). If this flag is not set, the quaternion frame is in the Earth frame rotated so that the x-axis is pointing forward (yaw relative to vehicle).</description>
+        <description>Lock yaw angle to absolute angle relative to North (not relative to vehicle). If this flag is set, the yaw angle and z component of angular velocity are relative to North (earth frame, x-axis pointing North), else they are relative to the vehicle heading (vehicle frame, earth frame rotated so that the x-axis is pointing forward).</description>
+      </entry>
+      <entry value="32" name="GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME">
+        <description>Yaw angle and z component of angular velocity are relative to the vehicle heading (vehicle frame, earth frame rotated such that the x-axis is pointing forward).</description>
+      </entry>
+      <entry value="64" name="GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME">
+        <description>Yaw angle and z component of angular velocity are relative to North (earth frame, x-axis is pointing North).</description>
+      </entry>
+      <entry value="128" name="GIMBAL_DEVICE_FLAGS_ACCEPTS_YAW_IN_EARTH_FRAME">
+        <description>Gimbal device can accept yaw angle inputs relative to North (earth frame). This flag is only for reporting (attempts to set this flag are ignored).</description>
+      </entry>
+      <entry value="256" name="GIMBAL_DEVICE_FLAGS_RC_EXCLUSIVE">
+        <description>The gimbal orientation is set exclusively by the RC signals feed to the gimbal's radio control inputs. MAVLink messages for setting the gimbal orientation (GIMBAL_DEVICE_SET_ATTITUDE) are ignored.</description>
+      </entry>
+      <entry value="512" name="GIMBAL_DEVICE_FLAGS_RC_MIXED">
+        <description>The gimbal orientation is determined by combining/mixing the RC signals feed to the gimbal's radio control inputs and the MAVLink messages for setting the gimbal orientation (GIMBAL_DEVICE_SET_ATTITUDE). How these two controls are combined or mixed is not defined by the protocol but is up to the implementation.</description>
       </entry>
     </enum>
     <enum name="GIMBAL_MANAGER_FLAGS" bitmask="true">
       <description>Flags for high level gimbal manager operation The first 16 bits are identical to the GIMBAL_DEVICE_FLAGS.</description>
       <entry value="1" name="GIMBAL_MANAGER_FLAGS_RETRACT">
-        <description>Based on GIMBAL_DEVICE_FLAGS_RETRACT</description>
+        <description>Based on GIMBAL_DEVICE_FLAGS_RETRACT.</description>
       </entry>
       <entry value="2" name="GIMBAL_MANAGER_FLAGS_NEUTRAL">
-        <description>Based on GIMBAL_DEVICE_FLAGS_NEUTRAL</description>
+        <description>Based on GIMBAL_DEVICE_FLAGS_NEUTRAL.</description>
       </entry>
       <entry value="4" name="GIMBAL_MANAGER_FLAGS_ROLL_LOCK">
-        <description>Based on GIMBAL_DEVICE_FLAGS_ROLL_LOCK</description>
+        <description>Based on GIMBAL_DEVICE_FLAGS_ROLL_LOCK.</description>
       </entry>
       <entry value="8" name="GIMBAL_MANAGER_FLAGS_PITCH_LOCK">
-        <description>Based on GIMBAL_DEVICE_FLAGS_PITCH_LOCK</description>
+        <description>Based on GIMBAL_DEVICE_FLAGS_PITCH_LOCK.</description>
       </entry>
       <entry value="16" name="GIMBAL_MANAGER_FLAGS_YAW_LOCK">
-        <description>Based on GIMBAL_DEVICE_FLAGS_YAW_LOCK</description>
+        <description>Based on GIMBAL_DEVICE_FLAGS_YAW_LOCK.</description>
+      </entry>
+      <entry value="32" name="GIMBAL_MANAGER_FLAGS_YAW_IN_VEHICLE_FRAME">
+        <description>Based on GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME.</description>
+      </entry>
+      <entry value="64" name="GIMBAL_MANAGER_FLAGS_YAW_IN_EARTH_FRAME">
+        <description>Based on GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME.</description>
+      </entry>
+      <entry value="128" name="GIMBAL_MANAGER_FLAGS_ACCEPTS_YAW_IN_EARTH_FRAME">
+        <description>Based on GIMBAL_DEVICE_FLAGS_ACCEPTS_YAW_IN_EARTH_FRAME.</description>
+      </entry>
+      <entry value="256" name="GIMBAL_MANAGER_FLAGS_RC_EXCLUSIVE">
+        <description>Based on GIMBAL_DEVICE_FLAGS_RC_EXCLUSIVE.</description>
+      </entry>
+      <entry value="512" name="GIMBAL_MANAGER_FLAGS_RC_MIXED">
+        <description>Based on GIMBAL_DEVICE_FLAGS_RC_MIXED.</description>
       </entry>
     </enum>
     <enum name="GIMBAL_DEVICE_ERROR_FLAGS" bitmask="true">
@@ -562,7 +604,7 @@
         <description>There is an error with the gimbal power source.</description>
       </entry>
       <entry value="32" name="GIMBAL_DEVICE_ERROR_FLAGS_MOTOR_ERROR">
-        <description>There is an error with the gimbal motor's.</description>
+        <description>There is an error with the gimbal motors.</description>
       </entry>
       <entry value="64" name="GIMBAL_DEVICE_ERROR_FLAGS_SOFTWARE_ERROR">
         <description>There is an error with the gimbal's software.</description>
@@ -571,7 +613,10 @@
         <description>There is an error with the gimbal's communication.</description>
       </entry>
       <entry value="256" name="GIMBAL_DEVICE_ERROR_FLAGS_CALIBRATION_RUNNING">
-        <description>Gimbal is currently calibrating.</description>
+        <description>Gimbal device is currently calibrating.</description>
+      </entry>
+      <entry value="512" name="GIMBAL_DEVICE_ERROR_FLAGS_NO_MANAGER">
+        <description>Gimbal device is not assigned to a gimbal manager.</description>
       </entry>
     </enum>
     <!-- gripper action enum -->
@@ -3731,7 +3776,7 @@
         <description>Continuous zoom up/down until stopped (-1 for wide, 1 for tele, 0 to stop zooming)</description>
       </entry>
       <entry value="2" name="ZOOM_TYPE_RANGE">
-        <description>Zoom value as proportion of full camera range (a value between 0.0 and 100.0)</description>
+        <description>Zoom value as proportion of full camera range (a percentage value between 0.0 and 100.0)</description>
       </entry>
       <entry value="3" name="ZOOM_TYPE_FOCAL_LENGTH">
         <description>Zoom value/variable focal length in millimetres. Note that there is no message to get the valid zoom range of the camera, so this can type can only be used for cameras where the zoom range is known (implying that this cannot reliably be used in a GCS for an arbitrary camera)</description>
@@ -4465,12 +4510,12 @@
       <entry value="60" name="AIS_TYPE_PASSENGER"/>
       <entry value="61" name="AIS_TYPE_PASSENGER_HAZARDOUS_A"/>
       <entry value="62" name="AIS_TYPE_PASSENGER_HAZARDOUS_B"/>
-      <entry value="63" name="AIS_TYPE_AIS_TYPE_PASSENGER_HAZARDOUS_C"/>
+      <entry value="63" name="AIS_TYPE_PASSENGER_HAZARDOUS_C"/>
       <entry value="64" name="AIS_TYPE_PASSENGER_HAZARDOUS_D"/>
       <entry value="65" name="AIS_TYPE_PASSENGER_RESERVED_1"/>
       <entry value="66" name="AIS_TYPE_PASSENGER_RESERVED_2"/>
       <entry value="67" name="AIS_TYPE_PASSENGER_RESERVED_3"/>
-      <entry value="68" name="AIS_TYPE_AIS_TYPE_PASSENGER_RESERVED_4"/>
+      <entry value="68" name="AIS_TYPE_PASSENGER_RESERVED_4"/>
       <entry value="69" name="AIS_TYPE_PASSENGER_UNKNOWN"/>
       <entry value="70" name="AIS_TYPE_CARGO"/>
       <entry value="71" name="AIS_TYPE_CARGO_HAZARDOUS_A"/>
@@ -5091,7 +5136,7 @@
       <field type="int16_t" name="temperature_press_diff" units="cdegC" invalid="0">Differential pressure temperature (0, if not available). Report values of 0 (or 1) as 1 cdegC.</field>
     </message>
     <message id="30" name="ATTITUDE">
-      <description>The attitude in the aeronautical frame (right-handed, Z-down, X-front, Y-right).</description>
+      <description>The attitude in the aeronautical frame (right-handed, Z-down, Y-right, X-front, ZYX, intrinsic).</description>
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
       <field type="float" name="roll" units="rad">Roll angle (-pi..+pi)</field>
       <field type="float" name="pitch" units="rad">Pitch angle (-pi..+pi)</field>
@@ -5864,14 +5909,17 @@
       <field type="float" name="xgyro" units="rad/s">Angular speed around X axis</field>
       <field type="float" name="ygyro" units="rad/s">Angular speed around Y axis</field>
       <field type="float" name="zgyro" units="rad/s">Angular speed around Z axis</field>
-      <field type="float" name="lat" units="deg">Latitude</field>
-      <field type="float" name="lon" units="deg">Longitude</field>
+      <field type="float" name="lat" units="deg">Latitude (lower precision). Both this and the lat_int field should be set.</field>
+      <field type="float" name="lon" units="deg">Longitude (lower precision). Both this and the lon_int field should be set.</field>
       <field type="float" name="alt" units="m">Altitude</field>
       <field type="float" name="std_dev_horz">Horizontal position standard deviation</field>
       <field type="float" name="std_dev_vert">Vertical position standard deviation</field>
       <field type="float" name="vn" units="m/s">True velocity in north direction in earth-fixed NED frame</field>
       <field type="float" name="ve" units="m/s">True velocity in east direction in earth-fixed NED frame</field>
       <field type="float" name="vd" units="m/s">True velocity in down direction in earth-fixed NED frame</field>
+      <extensions/>
+      <field type="int32_t" name="lat_int" units="degE7" invalid="0">Latitude (higher precision). If 0, recipients should use the lat field value (otherwise this field is preferred).</field>
+      <field type="int32_t" name="lon_int" units="degE7" invalid="0">Longitude (higher precision). If 0, recipients should use the lon field value (otherwise this field is preferred).</field>
     </message>
     <message id="109" name="RADIO_STATUS">
       <description>Status generated by radio and injected into MAVLink stream.</description>
@@ -6379,6 +6427,7 @@
       <field type="float" name="pt_compensation">Pressure/temperature compensation</field>
       <extensions/>
       <field type="float" name="ignition_voltage" units="V">Supply voltage to EFI sparking system.  Zero in this value means "unknown", so if the supply voltage really is zero volts use 0.0001 instead.</field>
+      <field type="float" name="fuel_pressure" units="kPa">Fuel pressure. Zero in this value means "unknown", so if the fuel pressure really is zero kPa use 0.0001 instead.</field>
     </message>
     <!-- MESSAGE IDs 180 - 229: Space for custom messages in individual projectname_messages.xml files -->
     <message id="230" name="ESTIMATOR_STATUS">
@@ -6684,8 +6733,8 @@
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
       <field type="uint8_t" name="mode_id" enum="CAMERA_MODE">Camera mode</field>
       <extensions/>
-      <field type="float" name="zoomLevel" invalid="NaN">Current zoom level (0.0 to 100.0, NaN if not known)</field>
-      <field type="float" name="focusLevel" invalid="NaN">Current focus level (0.0 to 100.0, NaN if not known)</field>
+      <field type="float" name="zoomLevel" invalid="NaN">Current zoom level as a percentage of the full range (0.0 to 100.0, NaN if not known)</field>
+      <field type="float" name="focusLevel" invalid="NaN">Current focus level as a percentage of the full range (0.0 to 100.0, NaN if not known)</field>
     </message>
     <message id="261" name="STORAGE_INFORMATION">
       <description>Information about a storage medium. This message is sent in response to a request with MAV_CMD_REQUEST_MESSAGE and whenever the status of the storage changes (STORAGE_STATUS). Use MAV_CMD_REQUEST_MESSAGE.param2 to indicate the index/id of requested storage: 0 for all, 1 for first, 2 for second, etc.</description>
@@ -6900,55 +6949,85 @@
       <field type="uint64_t" name="uid" invalid="0">UID of gimbal hardware (0 if unknown).</field>
       <field type="uint16_t" name="cap_flags" enum="GIMBAL_DEVICE_CAP_FLAGS" display="bitmask">Bitmap of gimbal capability flags.</field>
       <field type="uint16_t" name="custom_cap_flags" display="bitmask">Bitmap for use for gimbal-specific capability flags.</field>
-      <field type="float" name="roll_min" units="rad">Minimum hardware roll angle (positive: rolling to the right, negative: rolling to the left)</field>
-      <field type="float" name="roll_max" units="rad">Maximum hardware roll angle (positive: rolling to the right, negative: rolling to the left)</field>
-      <field type="float" name="pitch_min" units="rad">Minimum hardware pitch angle (positive: up, negative: down)</field>
-      <field type="float" name="pitch_max" units="rad">Maximum hardware pitch angle (positive: up, negative: down)</field>
-      <field type="float" name="yaw_min" units="rad">Minimum hardware yaw angle (positive: to the right, negative: to the left)</field>
-      <field type="float" name="yaw_max" units="rad">Maximum hardware yaw angle (positive: to the right, negative: to the left)</field>
+      <field type="float" name="roll_min" units="rad" invalid="NaN">Minimum hardware roll angle (positive: rolling to the right, negative: rolling to the left). NAN if unknown.</field>
+      <field type="float" name="roll_max" units="rad" invalid="NaN">Maximum hardware roll angle (positive: rolling to the right, negative: rolling to the left). NAN if unknown.</field>
+      <field type="float" name="pitch_min" units="rad" invalid="NaN">Minimum hardware pitch angle (positive: up, negative: down). NAN if unknown.</field>
+      <field type="float" name="pitch_max" units="rad" invalid="NaN">Maximum hardware pitch angle (positive: up, negative: down). NAN if unknown.</field>
+      <field type="float" name="yaw_min" units="rad" invalid="NaN">Minimum hardware yaw angle (positive: to the right, negative: to the left). NAN if unknown.</field>
+      <field type="float" name="yaw_max" units="rad" invalid="NaN">Maximum hardware yaw angle (positive: to the right, negative: to the left). NAN if unknown.</field>
     </message>
     <message id="284" name="GIMBAL_DEVICE_SET_ATTITUDE">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-      <description>Low level message to control a gimbal device's attitude. This message is to be sent from the gimbal manager to the gimbal device component. Angles and rates can be set to NaN according to use case.</description>
+      <description>Low level message to control a gimbal device's attitude. 
+	  This message is to be sent from the gimbal manager to the gimbal device component. 
+	  The quaternion and angular velocities can be set to NaN according to use case. 
+	  For the angles encoded in the quaternion and the angular velocities holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME is set, then they are relative to the vehicle heading (vehicle frame). 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME is set, then they are relative to absolute North (earth frame). 
+	  If neither of these flags are set, then (for backwards compatibility) it holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set, then they are relative to absolute North (earth frame), 
+	  else they are relative to the vehicle heading (vehicle frame). 
+	  Setting both GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME and GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME is not allowed. 
+	  These rules are to ensure backwards compatibility. 
+	  New implementations should always set either GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME or GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME.</description>
       <field type="uint8_t" name="target_system">System ID</field>
       <field type="uint8_t" name="target_component">Component ID</field>
-      <field type="uint16_t" name="flags" enum="GIMBAL_DEVICE_FLAGS">Low level gimbal flags.</field>
-      <field type="float[4]" name="q" invalid="[NaN]">Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation, the frame is depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set, set all fields to NaN if only angular velocity should be used)</field>
-      <field type="float" name="angular_velocity_x" units="rad/s" invalid="NaN">X component of angular velocity, positive is rolling to the right, NaN to be ignored.</field>
-      <field type="float" name="angular_velocity_y" units="rad/s" invalid="NaN">Y component of angular velocity, positive is pitching up, NaN to be ignored.</field>
-      <field type="float" name="angular_velocity_z" units="rad/s" invalid="NaN">Z component of angular velocity, positive is yawing to the right, NaN to be ignored.</field>
+      <field type="uint16_t" name="flags" enum="GIMBAL_DEVICE_FLAGS" display="bitmask">Low level gimbal flags.</field>
+      <field type="float[4]" name="q" invalid="[NaN]">Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame is described in the message description. Set fields to NaN to be ignored.</field>
+      <field type="float" name="angular_velocity_x" units="rad/s" invalid="NaN">X component of angular velocity (positive: rolling to the right). The frame is described in the message description. NaN to be ignored.</field>
+      <field type="float" name="angular_velocity_y" units="rad/s" invalid="NaN">Y component of angular velocity (positive: pitching up). The frame is described in the message description. NaN to be ignored.</field>
+      <field type="float" name="angular_velocity_z" units="rad/s" invalid="NaN">Z component of angular velocity (positive: yawing to the right). The frame is described in the message description. NaN to be ignored.</field>
     </message>
     <message id="285" name="GIMBAL_DEVICE_ATTITUDE_STATUS">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-      <description>Message reporting the status of a gimbal device. This message should be broadcasted by a gimbal device component. The angles encoded in the quaternion are relative to absolute North if the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set (roll: positive is rolling to the right, pitch: positive is pitching up, yaw is turn to the right) or relative to the vehicle heading if the flag is not set. This message should be broadcast at a low regular rate (e.g. 10Hz).</description>
+      <description>Message reporting the status of a gimbal device. 
+	  This message should be broadcast by a gimbal device component at a low regular rate (e.g. 5 Hz). 
+	  For the angles encoded in the quaternion and the angular velocities holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME is set, then they are relative to the vehicle heading (vehicle frame). 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME is set, then they are relative to absolute North (earth frame). 
+	  If neither of these flags are set, then (for backwards compatibility) it holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set, then they are relative to absolute North (earth frame), 
+	  else they are relative to the vehicle heading (vehicle frame). 
+	  Other conditions of the flags are not allowed. 
+	  The quaternion and angular velocities in the other frame can be calculated from delta_yaw and delta_yaw_velocity as 
+	  q_earth = q_delta_yaw * q_vehicle and w_earth = w_delta_yaw_velocity + w_vehicle (if not NaN).
+	  If neither the GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME nor the GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME flag is set, 
+	  then (for backwards compatibility) the data in the delta_yaw and delta_yaw_velocity fields are to be ignored.
+	  New implementations should always set either GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME or GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME, 
+	  and always should set delta_yaw and delta_yaw_velocity either to the proper value or NaN.</description>
       <field type="uint8_t" name="target_system">System ID</field>
       <field type="uint8_t" name="target_component">Component ID</field>
       <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
-      <field type="uint16_t" name="flags" enum="GIMBAL_DEVICE_FLAGS">Current gimbal flags set.</field>
-      <field type="float[4]" name="q">Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation, the frame is depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set)</field>
-      <field type="float" name="angular_velocity_x" units="rad/s" invalid="NaN">X component of angular velocity (NaN if unknown)</field>
-      <field type="float" name="angular_velocity_y" units="rad/s" invalid="NaN">Y component of angular velocity (NaN if unknown)</field>
-      <field type="float" name="angular_velocity_z" units="rad/s" invalid="NaN">Z component of angular velocity (NaN if unknown)</field>
-      <field type="uint32_t" name="failure_flags" display="bitmask" enum="GIMBAL_DEVICE_ERROR_FLAGS">Failure flags (0 for no failure)</field>
+      <field type="uint16_t" name="flags" enum="GIMBAL_DEVICE_FLAGS" display="bitmask">Current gimbal flags set.</field>
+      <field type="float[4]" name="q">Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame is described in the message description.</field>
+      <field type="float" name="angular_velocity_x" units="rad/s" invalid="NaN">X component of angular velocity (positive: rolling to the right). The frame is described in the message description. NaN if unknown.</field>
+      <field type="float" name="angular_velocity_y" units="rad/s" invalid="NaN">Y component of angular velocity (positive: pitching up). The frame is described in the message description. NaN if unknown.</field>
+      <field type="float" name="angular_velocity_z" units="rad/s" invalid="NaN">Z component of angular velocity (positive: yawing to the right). The frame is described in the message description. NaN if unknown.</field>
+      <field type="uint32_t" name="failure_flags" enum="GIMBAL_DEVICE_ERROR_FLAGS" display="bitmask">Failure flags (0 for no failure)</field>
+      <extensions/>
+      <field type="float" name="delta_yaw" units="rad" invalid="NAN">Yaw angle relating the quaternions in earth and body frames (see message description). NaN if unknown.</field>
+      <field type="float" name="delta_yaw_velocity" units="rad/s" invalid="NAN">Yaw angular velocity relating the angular velocities in earth and body frames (see message description). NaN if unknown.</field>
     </message>
     <message id="286" name="AUTOPILOT_STATE_FOR_GIMBAL_DEVICE">
       <wip/>
       <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-      <description>Low level message containing autopilot state relevant for a gimbal device. This message is to be sent from the gimbal manager to the gimbal device component. The data of this message server for the gimbal's estimator corrections in particular horizon compensation, as well as the autopilot's control intention e.g. feed forward angular control in z-axis.</description>
+      <description>Low level message containing autopilot state relevant for a gimbal device. This message is to be sent from the autopilot to the gimbal device component. The data of this message are for the gimbal device's estimator corrections, in particular horizon compensation, as well as indicates autopilot control intentions, e.g. feed forward angular control in the z-axis.</description>
       <field type="uint8_t" name="target_system">System ID</field>
       <field type="uint8_t" name="target_component">Component ID</field>
       <field type="uint64_t" name="time_boot_us" units="us">Timestamp (time since system boot).</field>
       <field type="float[4]" name="q">Quaternion components of autopilot attitude: w, x, y, z (1 0 0 0 is the null-rotation, Hamilton convention).</field>
-      <field type="uint32_t" name="q_estimated_delay_us" units="us">Estimated delay of the attitude data.</field>
-      <field type="float" name="vx" units="m/s">X Speed in NED (North, East, Down).</field>
-      <field type="float" name="vy" units="m/s">Y Speed in NED (North, East, Down).</field>
-      <field type="float" name="vz" units="m/s">Z Speed in NED (North, East, Down).</field>
-      <field type="uint32_t" name="v_estimated_delay_us" units="us">Estimated delay of the speed data.</field>
-      <field type="float" name="feed_forward_angular_velocity_z" units="rad/s" invalid="NaN">Feed forward Z component of angular velocity, positive is yawing to the right, NaN to be ignored. This is to indicate if the autopilot is actively yawing.</field>
+      <field type="uint32_t" name="q_estimated_delay_us" units="us" invalid="0">Estimated delay of the attitude data. 0 if unknown.</field>
+      <field type="float" name="vx" units="m/s" invalid="NaN">X Speed in NED (North, East, Down). NAN if unknown.</field>
+      <field type="float" name="vy" units="m/s" invalid="NaN">Y Speed in NED (North, East, Down). NAN if unknown.</field>
+      <field type="float" name="vz" units="m/s" invalid="NaN">Z Speed in NED (North, East, Down). NAN if unknown.</field>
+      <field type="uint32_t" name="v_estimated_delay_us" units="us" invalid="0">Estimated delay of the speed data. 0 if unknown.</field>
+      <field type="float" name="feed_forward_angular_velocity_z" units="rad/s" invalid="NaN">Feed forward Z component of angular velocity (positive: yawing to the right). NaN to be ignored. This is to indicate if the autopilot is actively yawing.</field>
       <field type="uint16_t" name="estimator_status" enum="ESTIMATOR_STATUS_FLAGS" display="bitmask">Bitmap indicating which estimator outputs are valid.</field>
       <field type="uint8_t" name="landed_state" enum="MAV_LANDED_STATE" invalid="MAV_LANDED_STATE_UNDEFINED">The landed state. Is set to MAV_LANDED_STATE_UNDEFINED if landed state is unknown.</field>
+      <extensions/>
+      <field type="float" name="angular_velocity_z" units="rad/s" invalid="NaN">Z component of angular velocity in NED (North, East, Down). NaN if unknown.</field>
     </message>
     <message id="287" name="GIMBAL_MANAGER_SET_PITCHYAW">
       <wip/>
@@ -7152,7 +7231,7 @@
     <message id="334" name="CELLULAR_STATUS">
       <description>Report current used cellular network status</description>
       <field type="uint8_t" name="status" enum="CELLULAR_STATUS_FLAG">Cellular modem status</field>
-      <field type="uint8_t" name="failure_reason" enum="CELLULAR_NETWORK_FAILED_REASON">Failure reason when status in in CELLUAR_STATUS_FAILED</field>
+      <field type="uint8_t" name="failure_reason" enum="CELLULAR_NETWORK_FAILED_REASON">Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED</field>
       <field type="uint8_t" name="type" enum="CELLULAR_NETWORK_RADIO_TYPE">Cellular network radio type: gsm, cdma, lte...</field>
       <field type="uint8_t" name="quality" invalid="UINT8_MAX">Signal quality in percent. If unknown, set to UINT8_MAX</field>
       <field type="uint16_t" name="mcc" invalid="UINT16_MAX">Mobile country code. If unknown, set to UINT16_MAX</field>
