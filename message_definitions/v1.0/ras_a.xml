@@ -169,7 +169,7 @@
         <param index="6" label="Y2 or Longitude 2">Local Y (mE4) or Longitude (degE7) (WGS84) (depending on MAV_FRAME) of point 2 of the exploration 3D space boundaries cuboid. INT32_MAX if not applicable.</param>
         <param index="7" label="Z3 or Altitude 3" units="m">Local Z or Altitude (MSL) (depending on MAV_FRAME) point 3 of the exploration 3D space boundaries cuboid. This also represents the height of the bottom plane of the cuboid. NaN if not applicable.</param>
       </entry>
-      <entry value="51015" name="MAV_CMD_SET_POI_FOCUS" hasLocation="false" isDestination="false">
+      <entry value="51020" name="MAV_CMD_SET_POI_FOCUS" hasLocation="false" isDestination="false">
         <wip/>
         <!-- This command is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
         <description>Sets a POI at the current focus point of the camera frame. This assumes that the camera system has the ability to geo-locate the current focus point.</description>
@@ -177,7 +177,7 @@
         <param index="2" label="X Position in the camera frame" minValue="0" increment="1">Position given by the number of pixels in X direction of the camera frame. Origin on the bottom left corner of the camera frame.</param>
         <param index="3" label="Y Position in the camera frame" minValue="0" increment="1">Position given by the number of pixels in Y direction of the camera frame. Origin on the bottom left corner of the camera frame.</param>
       </entry>
-      <entry value="51016" name="MAV_CMD_DO_FOLLOW_POI" hasLocation="false" isDestination="false">
+      <entry value="51021" name="MAV_CMD_DO_FOLLOW_POI" hasLocation="false" isDestination="false">
         <wip/>
         <!-- This command is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
         <description>Invoke platform to begin following a POI as a subject</description>
